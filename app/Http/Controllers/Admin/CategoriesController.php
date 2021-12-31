@@ -4,17 +4,21 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Models\category;
+use App\Rules\ParentRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use voku\helper\ASCII;
 
 class CategoriesController extends Controller
 {
-    public function validator($request){
+    public function validator($request,$id){
         $validators=validator::make($request->all(),[
-            'name'=>'required|max:255,min:3',
-            'parent_id'=>'nullable|exists:categories,id',
-            'descriptions'=>'nullable|max:1000'
+            'name'=>['required','max:255','min:3',"unique:categories,name,$id"],
+            'parent_id'=>['nullable',
+                'exists:categories,id',
+                new ParentRule($id)
+                ],
+            'descriptions'=>['nullable', 'max:1000']
         ]);
         return $validators;
     }
@@ -22,7 +26,7 @@ class CategoriesController extends Controller
     public function index()
     {
         $categories=category::all();
-        return view('categories.index',compact('categories'));
+        return view('admin.categories.index',compact('categories'));
     }
 
     /**
@@ -33,7 +37,7 @@ class CategoriesController extends Controller
     public function create()
     {
         $categories=category::all();
-        return  view('categories.create',compact('categories'));
+        return  view('admin.categories.create',compact('categories'));
     }
 
     /**
@@ -42,9 +46,9 @@ class CategoriesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return string
      */
-    public function store(Request $request)
+    public function store(Request $request, $id='')
     {
-       $validators=$this->validator($request);
+       $validators=$this->validator($request , $id);
         $validators->validate();
 
          category::create([
@@ -52,7 +56,8 @@ class CategoriesController extends Controller
              'parent_id'=>$request['parent_id'],
              'description'=>$request['description'],
          ]);
-         return redirect()->route('categories.index');
+         return redirect()->route('categories.index')->with('success','Category Added Successfully');
+
     }
 
     /**
@@ -74,9 +79,12 @@ class CategoriesController extends Controller
      */
     public function edit($id)
     {
-        $categories=category::all();
         $category=category::findOrFail($id);
-        return  view('categories.edit',compact('categories','category'));
+        $categories=category::where('id','<>',$id)
+                     ->where('parent_id','<>',$id)
+                     ->orWhereNull('parent_id')
+                     ->get();
+        return  view('admin.categories.edit',compact('categories','category'));
 
     }
 
@@ -89,15 +97,15 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validators=$this->validator($request);
+        $validators=$this->validator($request,$id);
         $validators->validate();
-        
+
         category::where('id',$id)->update([
             'name'=>$request['name'],
             'parent_id'=>$request['parent_id'],
             'description'=>$request['description'],
         ]);
-        return redirect()->route('categories.index');
+        return redirect()->route('categories.index')->with('success','Category Updateded Successfully');
     }
 
     /**
@@ -109,6 +117,6 @@ class CategoriesController extends Controller
     public function destroy($id)
     {
       category::findOrFail($id)->delete();
-        return redirect()->route('categories.index');
+        return redirect()->route('categories.index')->with('success','Category Removed Successfully');
     }
 }

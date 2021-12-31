@@ -16,20 +16,20 @@
         @csrf
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Category Name</label>
-            <input type="text" name="name" value="{{$category->name}}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            <input type="text" name="name" value="{{old('name',$category->name)}}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
         </div>
 
         <div class="mb-3">
             <select class="form-select"  name="parent_id"   aria-label="Default select example">
 
                 @foreach($categories as $category)
-                    <option value="{{$category->id}}" @if($category->id==$category->id) selected @endif>{{$category->name}}</option>
+                    <option value="{{$category->id}}" @if($category->id==old('parent_id',$category->id)) selected @endif>{{$category->name}}</option>
                 @endforeach
             </select>
         </div>
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Description</label>
-            <textarea class="form-control" name="description">{{$category->description}}</textarea>
+            <textarea class="form-control" name="description">{{old('description',$category->description)}}</textarea>
         </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>

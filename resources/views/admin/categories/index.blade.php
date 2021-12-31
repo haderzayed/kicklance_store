@@ -3,10 +3,13 @@
 
 @section('content')
     <a  href="{{route('categories.create')}}" class="btn btn-success  " style="float: right">Add Category</a>
+    @include('admin.alert.success')
+    @include('admin.alert.error')
 <table class="table ">
     <thead>
     <tr>
         <th scope="col">#</th>
+        <th scope="col">id</th>
         <th scope="col">Name</th>
         <th scope="col">Parent</th>
         <th scope="col">Created AT</th>
@@ -20,6 +23,7 @@
     <tr>
         <?php $i++;?>
         <td>{{$i}}</td>
+       <td>{{$category->id}}</td>
         <td>{{$category->name}}</td>
         <td>{{$category->parent_id}}</td>
         <td>{{$category->created_at}}</td>
