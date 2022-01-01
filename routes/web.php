@@ -14,6 +14,7 @@ use App\Http\Controllers;
 */
 
 Route::group(['namespace'=>'Admin','prefix'=>'Admin'],function (){
+    ################################### categories ##############################################
     Route::group(['prefix'=>'categories'],function(){
         Route::get('index','CategoriesController@index')->name('categories.index');
         Route::get('create','CategoriesController@create')->name('categories.create');
@@ -21,6 +22,15 @@ Route::group(['namespace'=>'Admin','prefix'=>'Admin'],function (){
         Route::get('edit/{id}','CategoriesController@edit')->name('categories.edit');
         Route::post('update/{id}','CategoriesController@update')->name('categories.update');
         Route::get('delete/{id}','CategoriesController@destroy')->name('categories.delete');
+    });
+    ################################### products ##############################################
+    Route::group(['prefix'=>'products'],function(){
+        Route::get('index','ProductsController@index')->name('products.index');
+        Route::get('create','ProductsController@create')->name('products.create');
+        Route::post('store','ProductsController@store')->name('products.store');
+        Route::get('edit/{id}','ProductsController@edit')->name('products.edit');
+        Route::post('update/{id}','ProductsController@update')->name('products.update');
+        Route::get('delete/{id}','ProductsController@destroy')->name('products.delete');
     });
 });
 
