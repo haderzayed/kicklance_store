@@ -12,8 +12,8 @@
         <th scope="col">id</th>
         <th scope="col">Name</th>
         <th scope="col">Parent</th>
+        <th scope="col">NO.Product</th>
         <th scope="col">Created AT</th>
-        <th scope="col">Updated AT</th>
         <th scope="col"></th>
     </tr>
     </thead>
@@ -25,9 +25,9 @@
         <td>{{$i}}</td>
        <td>{{$category->id}}</td>
         <td>{{$category->name}}</td>
-        <td>{{$category->parent_id}}</td>
+        <td>{{$category->parent->name}}</td>
+        <td>{{$category->productCount->count()}}</td>
         <td>{{$category->created_at}}</td>
-        <td>{{$category->updated_at}}</td>
         <td>
             <a href="{{route('categories.edit',$category->id)}}" class="btn btn-info btn-sm fa fa-edit" role="button" aria-pressed="true"> </a>
             <a  href="{{route('categories.delete',$category->id)}}" class="btn btn-danger btn-sm fa fa-trash" >  </a>

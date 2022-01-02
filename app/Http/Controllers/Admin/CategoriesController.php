@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\category;
 use App\Rules\ParentRule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use voku\helper\ASCII;
 
@@ -25,7 +26,28 @@ class CategoriesController extends Controller
 
     public function index()
     {
-        $categories=category::all();
+       $categories=category::all();
+      /*  $categories=category::leftJoin('categories as parents','parents.id','=' ,'categories.parent_id')
+                     ->leftJoin('products', 'products.category__id' , '=' , 'categories.id')
+                     ->select([
+                         'categories.id',
+                         'categories.name',
+                         'categories.parent_id',
+                         'categories.created_at',
+                         'categories.updated_at',
+                         'parents.name as parent_name',
+                         DB::raw('count(products.id) as products_count'),
+                     ])
+                      ->groupBy([
+                          'categories.id',
+                          'categories.name',
+                          'categories.parent_id',
+                          'categories.created_at',
+                          'categories.updated_at',
+                          'parent_name'
+                      ])
+                      ->orderBy('products_count','DESC')
+                     ->paginate();*/
         return view('admin.categories.index',compact('categories'));
     }
 

@@ -44,7 +44,7 @@
     </div>
     <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Product Image</label>
-        <img src="{{$product->image}}" height="70" alt=" " class="d-block m-2">
+        <img src="{{$product->image_url}}" height="70" alt=" " class="d-block m-2">
         <input type="file" name="image" value="{{old('image')}}" class="form-control"   >
     </div>
     <div class="mb-3">

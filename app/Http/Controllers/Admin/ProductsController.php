@@ -13,16 +13,50 @@ use Illuminate\Support\Str;
 class ProductsController extends Controller
 {
    public function index(){
-       $products=product::all();
-       return view('admin.products.index',compact('products'));
+        $categories=category::all();
+       $request=request();
+       $filters=$request->query();
+       /*$products=product::query();
+       if($request->query('name')){
+           $products->where('name','LiKe','%'. $request->query('name') .'%');
+       }
+       if($request->query('price_min')){
+           $products->where('price','LiKe','%'. $request->query('price_min') .'%');
+       }
+       if($request->query('price_max')){
+           $products->where('price','LiKe','%'. $request->query('price_max') .'%');
+       }
+       if($request->query('category_id')){
+           $products->where('category__id','LiKe','%'. $request->query('category_id') .'%');
+       }*/
+    /*   $products=product::when($value,function ($query->object of database,$value){
+           $query->where('name','LiKe','%'. $value .'%');
+       });*/
+       $products=product::with('category')->when($request->query('name'),function ($query,$name){
+           $query->where('name','LIKE','%'. $name .'%');
+       })
+          ->when($request->query('price_min'),function ($query,$price_min){
+              $query->where('price','>=', $price_min );
+          })
+           ->when($request->query('price_max'),function ($query,$price_max){
+               $query->where('price','<=', $price_max );
+           })
+           ->when($request->query('category_id'),function ($query,$category_id){
+               $query->where('category__id','=', $category_id );
+           });
+       return view('admin.products.index',[
+           'categories'=>$categories,
+           'products'=>$products->paginate(),
+           'filters'=>$filters,
+           ]);
    }
+
    public function create(){
        $categories=category::all();
        return view('admin.products.create',compact('categories'));
    }
 
    public function store(Request $request){
-
       $data= $request->validate([
           'name'=>'required',
           'category__id'=>'required|exists:categories,id',
@@ -63,20 +97,28 @@ class ProductsController extends Controller
        ]);
 
        $old_image=$product->image;
-     //  dd($old_image);
        $data=$request->except('image','_token');
        $image=$request->file('image');
        if($request->hasFile('image') && $image->isValid()){
            $data['image']=$image->store('products','public');
        }
-
        $product=product::where('id',$id)->update($data);
-       if($old_image && isset($data['image'])){
-           $img= Str::after($old_image,'//127.0.0.1:8000/');
-          // Storage::disk('public')->delete($old_image);
-           //dd($old_image,$img);
-           unlink($img);
+       if(isset($old_image) && isset($data['image'])){
+         /*  $img= Str::after($old_image,'/storage');
+           $img=base_path('storage/app/public'.$img);
+           unlink($img);*/
+           Storage::disk('public')->delete($old_image);
        }
        return redirect()->route('products.index')->with('success',"product updated successfully ");
    }
+
+   public function destroy($id){
+       $product=product::findOrFail($id);
+       $product->delete();
+       if($product->image){
+           Storage::disk('public')->delete($product->image);
+       }
+       return redirect()->route('products.index')->with('success',"product Deleted successfully ");
+   }
+
 }

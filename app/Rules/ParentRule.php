@@ -2,7 +2,7 @@
 
 namespace App\Rules;
 
-use App\Models\Models\category;
+use App\Models\category;
 use Illuminate\Contracts\Validation\Rule;
 
 class ParentRule implements Rule

@@ -21,7 +21,7 @@
         @include('layouts.sidebar')
     </div>
 <div class="col-8 ">
-    <h2 style="text-align:center;">@yield('page-title','title')</h2>
+    <h2  >@yield('page-title','title')</h2>
     @yield('content')
 </div>
 

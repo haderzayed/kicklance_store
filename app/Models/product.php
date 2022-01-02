@@ -10,14 +10,14 @@ class product extends Model
     use HasFactory;
     protected $guarded=[];
 
-    public function categories(){
+    public function category(){
 
       return  $this->belongsTo(category::class,'category__id');
     }
 
-    public function getImageAttribute($val)
+    public function getImageUrlAttribute()
     {
-        return ($val !== null) ? asset('storage/'.$val) : asset('images/default.jpg');
+        return ($this->image !== null) ? asset('storage/'.$this->image) : asset('images/default.jpg');
 
     }
 }

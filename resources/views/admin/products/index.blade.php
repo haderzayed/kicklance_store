@@ -3,8 +3,24 @@
 
 @section('content')
     <a  href="{{route('products.create')}}" class="btn btn-success  " style="float: right">Add Product</a>
+    <br><br>
     @include('admin.alert.success')
     @include('admin.alert.error')
+    <div class="bg-light p-1 mb-3">
+        <form action="{{route('products.index')}}" method="get"  class="form-check-inline"   >
+            <input type="text" name="name"   class="control mb-1 " placeholder="Product Name.."    >
+            <input type="number" name="price_min" class="control  mb-1" placeholder="Price from.." >
+            <input type="number" name="price_max" class="control  mb-1" placeholder="price to.."  >
+            <select name="category_id" class="control  mb-1"  >
+                <option value="" selected> All Categories</option>
+                @foreach($categories as $category)
+                    <option value="{{$category->id}}">{{$category->name}}</option>
+                @endforeach
+            </select>
+            <button type="submit" class="btn btn-primary"> Find </button>
+        </form>
+    </div>
+
 <table class="table ">
     <thead>
     <tr>
@@ -23,9 +39,9 @@
     <tr>
         <?php $i++;?>
         <td>{{$i}}
+        <td><img style="width: 150px; height: 100px;" src="{{$product->image_url}}"></td>
         <td>{{$product->name}}</td>
-        <td><img style="width: 150px; height: 100px;" src="{{$product->image}}"></td>
-        <td>{{$product->categories->name}}</td>
+        <td>{{$product->category->name}}</td>
         <td>{{$product->name}}</td>
         <td>{{$product->name}}</td>
         <td>
