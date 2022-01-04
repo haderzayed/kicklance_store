@@ -13,7 +13,7 @@ use App\Http\Controllers;
 |
 */
 
-Route::group(['namespace'=>'Admin','prefix'=>'Admin'],function (){
+Route::group(['namespace'=>'Admin','prefix'=>'Admin','middleware'=>['auth','verified']],function (){
     ################################### categories ##############################################
     Route::group(['prefix'=>'categories'],function(){
         Route::get('index','CategoriesController@index')->name('categories.index');
@@ -36,5 +36,9 @@ Route::group(['namespace'=>'Admin','prefix'=>'Admin'],function (){
 
 
 Route::get('/', function () {
-    return 'hello';
+    return view('welcome');
 });
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');

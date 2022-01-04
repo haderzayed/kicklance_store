@@ -1,11 +1,12 @@
-@extends('layouts.home')
+@extends('layouts.admin')
 @section('page-title','Products')
 
 @section('content')
     <a  href="{{route('products.create')}}" class="btn btn-success  " style="float: right">Add Product</a>
     <br><br>
-    @include('admin.alert.success')
-    @include('admin.alert.error')
+
+    <x-alerts></x-alerts>
+
     <div class="bg-light p-1 mb-3">
         <form action="{{route('products.index')}}" method="get"  class="form-check-inline"   >
             <input type="text" name="name"   class="control mb-1 " placeholder="Product Name.."    >

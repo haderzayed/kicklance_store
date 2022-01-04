@@ -1,10 +1,9 @@
-@extends('layouts.home')
+@extends('layouts.admin')
 @section('page-title','Categories')
 
 @section('content')
     <a  href="{{route('categories.create')}}" class="btn btn-success  " style="float: right">Add Category</a>
-    @include('admin.alert.success')
-    @include('admin.alert.error')
+    <x-alerts></x-alerts>
 <table class="table ">
     <thead>
     <tr>

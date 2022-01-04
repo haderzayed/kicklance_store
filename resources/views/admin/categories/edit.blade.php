@@ -1,4 +1,4 @@
-@extends('layouts.home')
+@extends('layouts.admin')
 @section('page-title','Edit Categories')
 
 @section('content')
