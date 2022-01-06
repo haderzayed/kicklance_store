@@ -22,7 +22,7 @@ class UserType
 
             abort(403,'you are not admin!');
         }*/
-      
+
         if(!in_array($user->type,$type)){
 
              abort(403,'you are not admin!');

@@ -26,8 +26,8 @@ class CategoriesController extends Controller
 
     public function index()
     {
-         $categories=category::with('childs')->get();
-
+         $categories=category::with('children','products')->get();
+        // $Products_number=$categories->products()->sum('quantity');
      /*  $categories=category::leftJoin('categories as parents','parents.id','=' ,'categories.parent_id')
                      ->leftJoin('products', 'products.category__id' , '=' , 'categories.id')
                      ->select([
@@ -57,6 +57,13 @@ class CategoriesController extends Controller
      *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
+
+    public function show($id){
+        $category=category::findOrFail($id);
+        $products=$category->products;
+        return  view('admin.categories.show',compact('category','products'));
+    }
+
     public function create()
     {
         $categories=category::all();
@@ -86,10 +93,7 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
+
 
     /**
      * Show the form for editing the specified resource.

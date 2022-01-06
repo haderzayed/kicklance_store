@@ -11,6 +11,16 @@ class category extends Model
 
     protected $guarded = [];
 
+    public function products (){
+        return $this->hasMany(product::class,'category__id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(self::class, 'parent_id')->orderBy('name','desc');
+    }
+
+
     public function parent()
     {
         return $this->belongsTo(self::class, 'parent_id')->withDefault([
@@ -18,13 +28,5 @@ class category extends Model
         ]);
     }
 
-    public function childs()
-    {
-        return $this->hasMany(self::class, 'parent_id')->orderBy('name','desc');
-    }
 
-    public function productCount()
-    {
-        return $this->hasMany(product::class, 'category__id');
-    }
 }

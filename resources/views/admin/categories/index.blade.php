@@ -9,7 +9,6 @@
     <thead>
     <tr>
         <th scope="col">#</th>
-        <th scope="col">id</th>
         <th scope="col">Name</th>
         <th scope="col">Parent</th>
         <th scope="col">NO.Product</th>
@@ -23,10 +22,9 @@
     <tr>
         <?php $i++;?>
         <td>{{$i}}</td>
-       <td>{{$category->id}}</td>
-        <td>{{$category->name}}</td>
+        <td><a href="{{route('categories.show',$category->id)}}">{{$category->name}}</a> </td>
         <td>{{$category->parent->name}}</td>
-        <td>{{$category->productCount->count()}}</td>
+        <td>{{$category->products->count()}}</td>
         <td>{{$category->created_at}}</td>
         <td>
             <a href="{{route('categories.edit',$category->id)}}" class="btn btn-info btn-sm fa fa-edit" role="button" aria-pressed="true"> </a>

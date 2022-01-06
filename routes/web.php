@@ -18,6 +18,7 @@ Route::group(['namespace'=>'Admin','prefix'=>'Admin','middleware'=>['auth','veri
     ################################### categories ##############################################
     Route::group(['prefix'=>'categories'],function(){
         Route::get('index','CategoriesController@index')->name('categories.index');
+        Route::get('show/{id}','CategoriesController@show')->name('categories.show');
         Route::get('create','CategoriesController@create')->name('categories.create');
         Route::post('store','CategoriesController@store')->name('categories.store');
         Route::get('edit/{id}','CategoriesController@edit')->name('categories.edit');

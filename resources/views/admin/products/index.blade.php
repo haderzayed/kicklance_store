@@ -43,8 +43,8 @@
         <td><img style="width: 150px; height: 100px;" src="{{$product->image_url}}"></td>
         <td>{{$product->name}}</td>
         <td>{{$product->category->name}}</td>
-        <td>{{$product->name}}</td>
-        <td>{{$product->name}}</td>
+        <td>{{$product->price}}</td>
+        <td>{{$product->quantity}}</td>
         <td>
             <a href="{{route('products.edit',$product->id)}}" class="btn btn-info btn-sm fa fa-edit" role="button" aria-pressed="true"> </a>
             <a  href="{{route('products.delete',$product->id)}}" class="btn btn-danger btn-sm fa fa-trash" >  </a>

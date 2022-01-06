@@ -32,6 +32,7 @@ class ProductsController extends Controller
     /*   $products=product::when($value,function ($query->object of database,$value){
            $query->where('name','LiKe','%'. $value .'%');
        });*/
+       // Eager loading
        $products=product::with('category')->when($request->query('name'),function ($query,$name){
            $query->where('name','LIKE','%'. $name .'%');
        })
