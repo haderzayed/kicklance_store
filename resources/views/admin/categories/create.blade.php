@@ -22,7 +22,7 @@
 
     <div class="mb-3">
         <select class="form-select"  name="parent_id" aria-label="Default select example">
-
+            <option  value=" ">Select Parent</option>
             @foreach($categories as $category)
             <option value="{{$category->id}}">{{old('parent_id',$category->name)}}</option>
             @endforeach

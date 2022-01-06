@@ -26,8 +26,9 @@ class CategoriesController extends Controller
 
     public function index()
     {
-       $categories=category::all();
-      /*  $categories=category::leftJoin('categories as parents','parents.id','=' ,'categories.parent_id')
+         $categories=category::with('childs')->get();
+
+     /*  $categories=category::leftJoin('categories as parents','parents.id','=' ,'categories.parent_id')
                      ->leftJoin('products', 'products.category__id' , '=' , 'categories.id')
                      ->select([
                          'categories.id',
@@ -47,7 +48,7 @@ class CategoriesController extends Controller
                           'parent_name'
                       ])
                       ->orderBy('products_count','DESC')
-                     ->paginate();*/
+                     ->paginate(); */
         return view('admin.categories.index',compact('categories'));
     }
 
@@ -73,11 +74,8 @@ class CategoriesController extends Controller
        $validators=$this->validator($request , $id);
         $validators->validate();
 
-         category::create([
-             'name'=>$request['name'],
-             'parent_id'=>$request['parent_id'],
-             'description'=>$request['description'],
-         ]);
+
+         category::create($request->all());
          return redirect()->route('categories.index')->with('success','Category Added Successfully');
 
     }

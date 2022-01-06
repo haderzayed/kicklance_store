@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\UserType;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers;
 /*
@@ -13,7 +14,7 @@ use App\Http\Controllers;
 |
 */
 
-Route::group(['namespace'=>'Admin','prefix'=>'Admin','middleware'=>['auth','verified']],function (){
+Route::group(['namespace'=>'Admin','prefix'=>'Admin','middleware'=>['auth','verified','user.type:admin,user']],function (){
     ################################### categories ##############################################
     Route::group(['prefix'=>'categories'],function(){
         Route::get('index','CategoriesController@index')->name('categories.index');
@@ -42,3 +43,9 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
+
+Route::get('test',function(){
+   $category = \App\Models\category::with('childs')->find(19);
+ //  $category->load('childs');
+   dd($category);
+});
