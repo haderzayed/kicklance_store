@@ -28,6 +28,7 @@ Route::group(['namespace'=>'Admin','prefix'=>'Admin','middleware'=>['auth','veri
     ################################### products ##############################################
     Route::group(['prefix'=>'products'],function(){
         Route::get('index','ProductsController@index')->name('products.index');
+        Route::get('show/{id}','ProductsController@show')->name('products.show');
         Route::get('create','ProductsController@create')->name('products.create');
         Route::post('store','ProductsController@store')->name('products.store');
         Route::get('edit/{id}','ProductsController@edit')->name('products.edit');

@@ -28,6 +28,13 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
     ];
+    public function products(){
+        return $this->hasMany(product::class);
+    }
+    public function profile(){
+        return $this->hasOne(Profile::class,'user_id')->withDefault();
+    }
+
 
     /**
      * The attributes that should be hidden for serialization.

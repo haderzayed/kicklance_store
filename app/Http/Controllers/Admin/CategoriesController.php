@@ -26,7 +26,7 @@ class CategoriesController extends Controller
 
     public function index()
     {
-         $categories=category::with('children','products')->get();
+
         // $Products_number=$categories->products()->sum('quantity');
      /*  $categories=category::leftJoin('categories as parents','parents.id','=' ,'categories.parent_id')
                      ->leftJoin('products', 'products.category__id' , '=' , 'categories.id')
@@ -49,6 +49,10 @@ class CategoriesController extends Controller
                       ])
                       ->orderBy('products_count','DESC')
                      ->paginate(); */
+        $categories=category::with('parent')->withCount('products')
+            ->orderBy('products_count','ASC')
+            ->orderBy('name', )
+            ->paginate();
         return view('admin.categories.index',compact('categories'));
     }
 

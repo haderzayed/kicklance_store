@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\category;
 use App\Models\product;
+use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -33,7 +35,7 @@ class ProductsController extends Controller
            $query->where('name','LiKe','%'. $value .'%');
        });*/
        // Eager loading
-       $products=product::with('category')->when($request->query('name'),function ($query,$name){
+       $products=product::with('category','user')->when($request->query('name'),function ($query,$name){
            $query->where('name','LIKE','%'. $name .'%');
        })
           ->when($request->query('price_min'),function ($query,$price_min){
@@ -52,12 +54,22 @@ class ProductsController extends Controller
            ]);
    }
 
+
+   public function show($id){
+       $product=product::with('tags')->findOrFail($id);
+       $tags=Tag::whereRaw('id In (SELECT tag_id FROM product_tag WHERE product_id = ?)',$id)->get();
+       return view('admin.products.show',compact('product','tags'));
+   }
+
+
    public function create(){
        $categories=category::all();
-       return view('admin.products.create',compact('categories'));
+       $tags=Tag::all();
+       return view('admin.products.create',compact('categories','tags'));
    }
 
    public function store(Request $request){
+
       $data= $request->validate([
           'name'=>'required',
           'category__id'=>'required|exists:categories,id',
@@ -68,24 +80,31 @@ class ProductsController extends Controller
           'image'=>'mimes:jpg,jpeg,png',
       ]);
 
-       $data=$request->except('image');
+       $data=$request->except('image', 'tags');
        $image=$request->file('image');
        if($request->hasFile('image') && $image->isValid()){
            $data['image']=$image->store('products','public');
        }
-      $product= product::create($data);
+       $product= product::create($data);
+       $this->saveTags($product, $request);
+      // $tags=$request->post('tag',[]);
+       //$product->tags()->sync($tags);
        return redirect()->route('products.index')->with('success',"product $product->name created successfully ");
    }
 
    public function edit($id){
        $categories=category::all();
        $product=product::findOrFail($id);
+       $tags=Tag::all();
+       //$product_tag=$product->tags()->pluck('id')->toArray();
+       $product_tag=implode(',',$product->tags()->pluck('name')->toArray());
 //       $s=Storage::disk('public');
 //       dd($s,$product->image);
-       return view('admin.products.edit',compact('categories','product'));
+       return view('admin.products.edit',compact('categories','product','tags','product_tag'));
    }
 
    public function update(Request $request ,$id){
+
        $product=product::findOrFail($id);
         $request->validate([
            'name'=>'required',
@@ -98,12 +117,25 @@ class ProductsController extends Controller
        ]);
 
        $old_image=$product->image;
-       $data=$request->except('image','_token');
+       $data=$request->except('image','_token','tags');
        $image=$request->file('image');
        if($request->hasFile('image') && $image->isValid()){
            $data['image']=$image->store('products','public');
        }
-       $product=product::where('id',$id)->update($data);
+      // $product=product::where('id',$id)->update($data);
+       $product->update($data);
+       $this->saveTags($product, $request);
+       //$tags=$request->post('tag',[]);
+      // $product->tags()->sync($tags);
+      // $product->tags()->syncWithoutDetaching($tags);
+
+       /*DB::table('product_tag')->where('product_id',$id)->delete();
+       foreach ($tags as $tag_id){
+          DB::table('product_tag')->insert([
+              'product_id'=>$id,
+              'tag_id'=>$tag_id
+          ]);
+       }*/
        if(isset($old_image) && isset($data['image'])){
          /*  $img= Str::after($old_image,'/storage');
            $img=base_path('storage/app/public'.$img);
@@ -122,4 +154,20 @@ class ProductsController extends Controller
        return redirect()->route('products.index')->with('success',"product Deleted successfully ");
    }
 
+   public function saveTags(product $product,Request $request){
+
+      $tags=explode(',',$request->post('tags'));
+      $tags_id=[];
+      foreach ($tags as $name){
+          $name=strtolower(trim($name));
+          $tag=Tag::where('name',$name)->first();
+          if(!$tag){
+              $tag=Tag::create([
+                  'name'=>$name
+              ]);
+          }
+          $tags_id[]=$tag->id;
+      }
+       $product->tags()->sync($tags_id);
+   }
 }

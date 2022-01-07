@@ -31,6 +31,7 @@
         <th scope="col">Category</th>
         <th scope="col">Price</th>
         <th scope="col">Quantity</th>
+        <th scope="col">User</th>
         <th scope="col"></th>
     </tr>
     </thead>
@@ -41,10 +42,11 @@
         <?php $i++;?>
         <td>{{$i}}
         <td><img style="width: 150px; height: 100px;" src="{{$product->image_url}}"></td>
-        <td>{{$product->name}}</td>
+        <td><a href="{{route('products.show',$product->id)}}">{{$product->name}}</a> </td>
         <td>{{$product->category->name}}</td>
         <td>{{$product->price}}</td>
         <td>{{$product->quantity}}</td>
+        <td>{{$product->user->name}}</td>
         <td>
             <a href="{{route('products.edit',$product->id)}}" class="btn btn-info btn-sm fa fa-edit" role="button" aria-pressed="true"> </a>
             <a  href="{{route('products.delete',$product->id)}}" class="btn btn-danger btn-sm fa fa-trash" >  </a>

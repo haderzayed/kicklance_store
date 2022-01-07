@@ -47,6 +47,27 @@
         <img src="{{$product->image_url}}" height="70" alt=" " class="d-block m-2">
         <input type="file" name="image" value="{{old('image')}}" class="form-control"   >
     </div>
+  {{--   <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Tags</label>
+        @foreach($tags as $tag)
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" name="tags[]" value="{{$tag->id}}" @if(in_array($tag->id , $product_tag)) checked @endIf>
+                <label class="form-check-label">{{$tag->name}}</label>
+            </div>
+        @endforeach
+    </div>
+    --}}
+    <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Tags</label>
+
+            <div class="form-group">
+                <input type="text" class="form-control @error('tags')  is-invalid @enderror" name="tags" value="{{old('tags', $product_tag)}}"  >
+               @error('$tags')
+                <p class="invalid-feedback">{{$message}}</p>
+                @enderror()
+            </div>
+
+    </div>
     <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Description</label>
         <textarea class="form-control" name="description">{{old('description',$product->description)}}</textarea>

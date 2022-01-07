@@ -20,7 +20,7 @@
     <div class="col-3">
         @include('layouts.sidebar')
     </div>
-<div class="col-8 ">
+<div class="col-9 ">
     <h2  >@yield('page-title','title')</h2>
     @yield('content')
 </div>

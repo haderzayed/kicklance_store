@@ -14,6 +14,20 @@ class product extends Model
 
       return  $this->belongsTo(category::class,'category__id');
     }
+    public function user(){
+        return   $this->belongsTo(User::class,'user_id')->withDefault([
+            'name'=>' '
+        ]);
+    }
+    public function tags(){
+        return $this->belongsToMany(
+            Tag::class,
+            'product_tag',
+            'product_id',
+            'tag_id',
+
+        );
+    }
 
     public function getImageUrlAttribute()
     {
