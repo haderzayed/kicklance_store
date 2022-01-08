@@ -9,6 +9,6 @@ class IndexController extends Controller
 {
     public function index(){
         $products=product::latest()->take(6)->get();
-        return view('home',compact('products'));
+        return view('front.home',compact('products'));
     }
 }

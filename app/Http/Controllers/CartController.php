@@ -1,7 +1,6 @@
 <?php
 
-use App\Models\Cart;
-use Illuminate\Support\Facades\Auth;
+
 
 namespace App\Http\Controllers;
 
@@ -17,8 +16,16 @@ use function Livewire\str;
 class CartController extends Controller
 {
     public function index(){
-        $items=Cart::where('id',$this->getCartId())->get();
-        return view('cart',compact('items'));
+        $cart=Cart::where('id',$this->getCartId())
+             ->orWhere('user_id',Auth::id())
+             ->get();
+        $sub_total=$cart->sum(function ($item){
+         return $item->quantity * $item->product->price;
+        });
+        $tax_ratio=14;
+        $tax=$sub_total * $tax_ratio/100;
+        $total=$sub_total+$tax;
+        return view('front.cart',compact('cart','sub_total','tax','total'));
     }
 
     public  function store(Request $request){

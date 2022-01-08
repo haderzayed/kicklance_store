@@ -14,11 +14,11 @@
 
 </head>
 <body class="antialiased">
-@include('layouts.navbar')
+@include('layouts.admin.navbar')
 <div class="container px-4">
     <div class="row gx-5 mt-5">
     <div class="col-3">
-        @include('layouts.sidebar')
+        @include('layouts.admin.sidebar')
     </div>
 <div class="col-9 ">
     <h2  >@yield('page-title','title')</h2>
