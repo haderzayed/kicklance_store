@@ -7,6 +7,7 @@ use App\Models\category;
 use App\Models\product;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -85,6 +86,7 @@ class ProductsController extends Controller
        if($request->hasFile('image') && $image->isValid()){
            $data['image']=$image->store('products','public');
        }
+       $data['user_id']=Auth::id();        //Auth::user()->id // $request()->user()->id;
        $product= product::create($data);
        $this->saveTags($product, $request);
       // $tags=$request->post('tag',[]);

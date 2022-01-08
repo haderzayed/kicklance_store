@@ -13,6 +13,8 @@ use App\Http\Controllers;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('cart','CartController@index')->name('cart');
+Route::post('cart','CartController@store')->name('cart.store');
 
 Route::group(['namespace'=>'Admin','prefix'=>'Admin','middleware'=>['auth','verified','user.type:admin,user']],function (){
     ################################### categories ##############################################
@@ -38,9 +40,7 @@ Route::group(['namespace'=>'Admin','prefix'=>'Admin','middleware'=>['auth','veri
 });
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/','IndexController@index' );
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
