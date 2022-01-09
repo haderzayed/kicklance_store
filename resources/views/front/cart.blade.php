@@ -21,7 +21,9 @@
                 <div class="col-md-8">
                     <div class="product-content-right">
                         <div class="woocommerce">
-                            <form method="post" action="#">
+                            <form method="post" action="{{route('cart.update')}}">
+                                @csrf
+                                @method('patch')
                                 <table cellspacing="0" class="shop_table cart">
                                     <thead>
                                     <tr>
@@ -41,7 +43,7 @@
                                         </td>
 
                                         <td class="product-thumbnail">
-                                            <a href="single-product.html"><img width="145" height="145" alt="poster_1_up" class="shop_thumbnail" src="img/product-thumb-2.jpg"></a>
+                                            <a href="single-product.html"><img width="145" height="145" alt="poster_1_up" class="shop_thumbnail" src="{{$item->product->image_url}}"></a>
                                         </td>
 
                                         <td class="product-name">
@@ -55,7 +57,7 @@
                                         <td class="product-quantity">
                                             <div class="quantity buttons_added">
                                                 <input type="button" class="minus" value="-">
-                                                <input type="number" size="4" class="input-text qty text" title="Qty" value="{{$item->quantity}}" min="0" step="1">
+                                                <input type="number" size="4" class="input-text qty text" title="Qty" name="quantity[{{$item->product_id}}]" value="{{$item->quantity}}" min="0" step="1">
                                                 <input type="button" class="plus" value="+">
                                             </div>
                                         </td>
@@ -72,14 +74,20 @@
                                                 <input type="text" placeholder="Coupon code" value="" id="coupon_code" class="input-text" name="coupon_code">
                                                 <input type="submit" value="Apply Coupon" name="apply_coupon" class="button">
                                             </div>
-                                            <input type="submit" value="Update Cart" name="update_cart" class="button">
-
+                                            <input type="submit"  name="update_cart" value="update cart" class="button">
+                                          
                                         </td>
                                     </tr>
+
                                     </tbody>
                                 </table>
                             </form>
 
+                            <form method="post" action="{{route('cart.destroy')}}" class=" ">
+                                @csrf
+                                @method('delete')
+                                <input type="submit" value="delete Cart" name="delete_cart" class="button">
+                            </form>
 
                         </div>
                     </div>

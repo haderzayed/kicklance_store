@@ -15,6 +15,8 @@ use App\Http\Controllers;
 */
 Route::get('cart','CartController@index')->name('cart');
 Route::post('cart','CartController@store')->name('cart.store');
+Route::delete('cart','CartController@destroy')->name('cart.destroy');
+Route::patch('cart','CartController@update')->name('cart.update');
 
 Route::group(['namespace'=>'Admin','prefix'=>'Admin','middleware'=>['auth','verified','user.type:admin,user']],function (){
     ################################### categories ##############################################

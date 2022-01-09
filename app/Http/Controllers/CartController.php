@@ -35,10 +35,11 @@ class CartController extends Controller
                'quantity'=>['int','min:1'],
            ]);
 
-           $cart=Cart::where([    'id'=>$this->getCartId(),
+         /*  $cart=Cart::where([
+               'id'=>$this->getCartId(),
                'product_id'=>$request->post('product_id'),
                ])->first();
-           /*  $cart=Cart::where([
+           $cart=Cart::where([
                'id'=>$this->getCartId(),
                'product_id'=>$request->post('product_id'),
                ])->first();
@@ -60,24 +61,52 @@ class CartController extends Controller
                    'user_id'=>Auth::id(),
                ] );
            }*/
+
            $cart=Cart::updateOrCreate([
                'id'=>$this->getCartId(),
                'product_id'=>$request->post('product_id'),
            ],[
 
-               'quantity'=>DB::raw('quantity + ' . $request->post('quantity',1)),
+               'quantity'=>DB::raw('quantity + ' . $request->post('quantity',0)),
                'user_id'=>Auth::id(),
            ] );
            //$product=product::find($request-
           $name=$cart->product->name;
            return redirect()->back()->with('success'," Product $name added to cart");
     }
+
     public function getCartId(){
-        $id= request()->cookie('cart_id');
+        $id= request()->cookie('cart_id');  // return cookie name=cart_id
         if(!$id){
             $id=str::uuid();
-            Cookie::queue('cart_id',$id,60 *24 *7);
+            Cookie::queue('cart_id',$id,60 *24 *7); //create new cookie with name  cart_id
         }
         return $id;
     }
+
+
+
+    public function update(Request $request){
+       $request->validate([
+           'quantity'=>['required','array'],
+       ]);
+        $that=$this;
+        foreach ($request->post('quantity') as $product_id => $quantity){
+             Cart::where('product_id',$product_id)
+                         ->where(function ($query) use ($that){
+                                   $query->where('id',$that->getCartId())
+                                         ->orWhere('user_id',Auth::id());
+                   })->update([
+                     'quantity'=>$quantity
+                 ]);
+        }
+        return redirect()->back()->with('status','cart updated');
+    }
+
+    public function destroy(){
+        Cart::where('id',$this->getCartId())->orWhere('user_id',Auth::id())->delete();
+        $cookie=Cookie::make('cart_id','',-60);
+        return redirect()->back()->with('status','cart cleared')->cookie($cookie);
+    }
+
 }
