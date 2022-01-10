@@ -17,7 +17,7 @@ class CreateCartsTable extends Migration
             $table->uuid('id');
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedSmallInteger('quantity')->default(1);
+            $table->unsignedSmallInteger('quantity')->default(0);
             $table->primary(['id','product_id']);
             $table->foreign('product_id')->on('products')->references('id');
             $table->foreign('user_id')->on('users')->references('id')->cascadeOnUpdate()->cascadeOnDelete();

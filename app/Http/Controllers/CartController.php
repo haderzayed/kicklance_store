@@ -20,7 +20,7 @@ class CartController extends Controller
              ->orWhere('user_id',Auth::id())
              ->get();
         $sub_total=$cart->sum(function ($item){
-         return $item->quantity * $item->product->price;
+         return $item->quantity * $item->product->final_price;
         });
         $tax_ratio=14;
         $tax=$sub_total * $tax_ratio/100;
@@ -67,7 +67,7 @@ class CartController extends Controller
                'product_id'=>$request->post('product_id'),
            ],[
 
-               'quantity'=>DB::raw('quantity + ' . $request->post('quantity',0)),
+               'quantity'=>DB::raw('quantity + ' . $request->post('quantity',1)),
                'user_id'=>Auth::id(),
            ] );
            //$product=product::find($request-
@@ -108,5 +108,16 @@ class CartController extends Controller
         $cookie=Cookie::make('cart_id','',-60);
         return redirect()->back()->with('status','cart cleared')->cookie($cookie);
     }
+
+    /*public function post(Request $request)
+    {
+        Post::create([
+           'title' => $request->title,
+            'slug' => Str::slug($request->title)
+            // 'new title' => 'new-title'
+        ]);
+    }*/
+
+
 
 }

@@ -51,7 +51,7 @@
                                         </td>
 
                                         <td class="product-price">
-                                            <span class="amount">£{{ $item->product->price }}</span>
+                                            <span class="amount">£{{ $item->product->final_price}}</span>
                                         </td>
 
                                         <td class="product-quantity">
@@ -63,7 +63,7 @@
                                         </td>
 
                                         <td class="product-subtotal">
-                                            <span class="amount">£{{$item->quantity * $item->product->price}}</span>
+                                            <span class="amount">£{{$item->quantity * $item->product->final_price}}</span>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -75,7 +75,7 @@
                                                 <input type="submit" value="Apply Coupon" name="apply_coupon" class="button">
                                             </div>
                                             <input type="submit"  name="update_cart" value="update cart" class="button">
-                                          
+
                                         </td>
                                     </tr>
 
@@ -96,13 +96,17 @@
                     <div class="cart_totals ">
                         <h2>Cart Totals</h2>
                         <div class="t">
+                            <form method="post" action="{{route('checkout')}}">
+                                @csrf
                             <span>Cart Subtotal: </span><span class="amount">£{{$sub_total}}</span>
                             <hr>
                             <span>tax: </span><span class="amount">£{{$tax}}</span>
                             <hr>
                             <span>Order Total: </span><span class="amount">£{{$total}}</span>
                             <hr>
-                            <input type="submit" value="CheckOut" name="update_cart" class="button">
+
+                          <input type="submit" value="CheckOut" name="chek_out" class="button">
+                            </form>
                         </div>
                  {{--<table cellspacing="0" >
                             <tbody>

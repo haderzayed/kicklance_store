@@ -18,6 +18,16 @@ Route::post('cart','CartController@store')->name('cart.store');
 Route::delete('cart','CartController@destroy')->name('cart.destroy');
 Route::patch('cart','CartController@update')->name('cart.update');
 
+
+
+Route::group(['middleware'=>'auth'],function (){
+    Route::post('checkout','CheckoutController@store')->name('checkout');
+    Route::get('orders','OrdersController@index')->name('orders');
+    Route::get('orders/{order}','OrdersController@show')->name('order.show');
+});
+
+
+
 Route::group(['namespace'=>'Admin','prefix'=>'Admin','middleware'=>['auth','verified','user.type:admin,user']],function (){
     ################################### categories ##############################################
     Route::group(['prefix'=>'categories'],function(){
@@ -42,7 +52,7 @@ Route::group(['namespace'=>'Admin','prefix'=>'Admin','middleware'=>['auth','veri
 });
 
 
-Route::get('/','IndexController@index' );
+Route::get('/','IndexController@index' )->name('home');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');

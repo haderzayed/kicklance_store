@@ -28,6 +28,21 @@ class product extends Model
 
         );
     }
+    public function orders(){
+
+        return $this->belongsToMany(Order::class,'order_products')
+            ->using(OrderProduct::class)
+            ->using(OrderProduct::class)
+            ->withPivot([
+                'price','quantity'
+            ]);
+    }
+    public function getFinalPriceAttribute(){
+        if($this->sale_price > 0){
+            return $this->sale_price;
+        }
+        return $this->price;
+    }
 
     public function getImageUrlAttribute()
     {
