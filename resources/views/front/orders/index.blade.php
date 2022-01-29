@@ -2,7 +2,7 @@
 
 @section('content')
     <x-alerts></x-alerts>
-   <h2>My Orders</h2>
+   <h2>{{trans('order.my_order')}}</h2>
     <table class="table ">
         <thead>
         <tr>

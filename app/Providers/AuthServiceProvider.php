@@ -25,6 +25,17 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+      /*  Gate::before(function($user ,$ability){
+            if($user->type == 'super_admin'){
+                return true ;
+            }
+        });*/
+        foreach(config('permissions') as $code =>$label){
+            Gate::define($code,function ($user) use($code){
+                return $user->role->permissions()->where('permission',$code)->exists();
+            });
+        }
+
+
     }
 }

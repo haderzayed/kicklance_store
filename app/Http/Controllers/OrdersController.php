@@ -15,7 +15,6 @@ class OrdersController extends Controller
     }
 
     public function show(Order $order){
-      //  dd($order->products);
         if (Auth::id() != $order->user_id){
             abort(404);
         }

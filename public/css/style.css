@@ -110,3 +110,25 @@ a{
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
+.modal-dialog .overlay {
+    background-color: #000;
+    display: block;
+    height: 100%;
+    left: 0;
+    opacity: .7;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 1052;
+}
+
+.modal-content.bg-warning .modal-header, .modal-content.alert-warning .modal-header,
+.modal-content.bg-warning .modal-footer,
+.modal-content.alert-warning .modal-footer {
+    border-color: #343a40;
+}
+
+.modal-content.bg-primary .close, .modal-content.alert-primary .close, .modal-content.bg-primary .mailbox-attachment-close, .modal-content.alert-primary .mailbox-attachment-close, .modal-content.bg-secondary .close, .modal-content.bg-secondary .mailbox-attachment-close, .modal-content.bg-info .close, .modal-content.alert-info .close, .modal-content.bg-info .mailbox-attachment-close, .modal-content.alert-info .mailbox-attachment-close, .modal-content.bg-danger .close, .modal-content.alert-danger .close, .modal-content.alert-error .close, .modal-content.bg-danger .mailbox-attachment-close, .modal-content.alert-danger .mailbox-attachment-close, .modal-content.alert-error .mailbox-attachment-close, .modal-content.bg-success .close, .modal-content.alert-success .close, .modal-content.bg-success .mailbox-attachment-close, .modal-content.alert-success .mailbox-attachment-close {
+    color: #ffffff;
+}
+

@@ -2,7 +2,9 @@
 @section('page-title','Products')
 
 @section('content')
+    @can('products.create')
     <a  href="{{route('products.create')}}" class="btn btn-success  " style="float: right">Add Product</a>
+    @endcan
     <br><br>
 
     <x-alerts></x-alerts>
@@ -48,8 +50,12 @@
         <td>{{$product->quantity}}</td>
         <td>{{$product->user->name}}</td>
         <td>
-            <a href="{{route('products.edit',$product->id)}}" class="btn btn-info btn-sm fa fa-edit" role="button" aria-pressed="true"> </a>
+            @can('update',$product)
+            <a href="{{route('products.update',$product->id)}}" class="btn btn-info btn-sm fa fa-edit" role="button" aria-pressed="true"> </a>
+            @endcan
+            @can('delete',$product)
             <a  href="{{route('products.delete',$product->id)}}" class="btn btn-danger btn-sm fa fa-trash" >  </a>
+            @endcan
         </td>
     </tr>
     @empty

@@ -9,8 +9,8 @@
             <a href="{{route('products.index')}}" class="list-group-item list-group-item-action py-2 ripple {{ (request()->is('Admin/products*')) ? 'active' : '' }}"
             ><i class="fas fa-lock fa-fw me-3"></i><span>Products</span></a
             >
-            <a href="#" class="list-group-item list-group-item-action py-2 ripple"
-            ><i class="fas fa-chart-line fa-fw me-3"></i><span>Analytics</span></a
+            <a href="{{route('roles.index')}}" class="list-group-item list-group-item-action py-2 ripple {{ (request()->is('Admin/roles*')) ? 'active' : '' }}"
+            ><i class="fas fa-lock fa-fw me-3"></i><span>Roles</span></a
             >
             <a href="#" class="list-group-item list-group-item-action py-2 ripple">
                 <i class="fas fa-chart-pie fa-fw me-3"></i><span>SEO</span>

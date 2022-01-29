@@ -13,46 +13,55 @@ use App\Http\Controllers;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('cart','CartController@index')->name('cart');
-Route::post('cart','CartController@store')->name('cart.store');
-Route::delete('cart','CartController@destroy')->name('cart.destroy');
-Route::patch('cart','CartController@update')->name('cart.update');
 
 
+    Route::get('cart','CartController@index')->name('cart');
+    Route::post('cart','CartController@store')->name('cart.store');
+    Route::delete('cart','CartController@destroy')->name('cart.destroy');
+    Route::patch('cart','CartController@update')->name('cart.update');
 
-Route::group(['middleware'=>'auth'],function (){
-    Route::post('checkout','CheckoutController@store')->name('checkout');
-    Route::get('orders','OrdersController@index')->name('orders');
-    Route::get('orders/{order}','OrdersController@show')->name('order.show');
+    Route::group(['middleware'=>'auth'],function (){
+        Route::post('checkout','CheckoutController@store')->name('checkout');
+        Route::get('orders','OrdersController@index')->name('orders');
+        Route::get('orders/{order}','OrdersController@show')->name('order.show');
+    });
+
+    Route::group(['namespace'=>'Admin','prefix'=>'Admin','middleware'=>['auth','verified','user.type:admin,user,super_admin']],function (){
+        ################################### categories ##############################################
+        Route::group(['prefix'=>'categories'],function(){
+            Route::get('xml','CategoriesController@xml');
+            Route::get('json','CategoriesController@json');
+            Route::get('index','CategoriesController@index')->name('categories.index');
+            Route::get('show/{id}','CategoriesController@show')->name('categories.show');
+            Route::get('create','CategoriesController@create')->name('categories.create');
+            Route::post('store','CategoriesController@store')->name('categories.store');
+            Route::get('edit/{id}','CategoriesController@edit')->name('categories.edit');
+            Route::post('update/{id}','CategoriesController@update')->name('categories.update');
+            Route::get('delete/{id}','CategoriesController@destroy')->name('categories.delete');
+        });
+        ################################### products ##############################################
+        Route::group(['prefix'=>'products'],function(){
+            Route::get('index','ProductsController@index')->name('products.index');
+            Route::get('show/{id}','ProductsController@show')->name('products.show');
+            Route::get('create','ProductsController@create')->name('products.create');
+            Route::post('store','ProductsController@store')->name('products.store');
+            Route::get('edit/{id}','ProductsController@edit')->name('products.edit');
+            Route::post('update/{id}','ProductsController@update')->name('products.update');
+            Route::get('delete/{id}','ProductsController@destroy')->name('products.delete');
+        });
+
+        Route::resource('roles','RolesController');
+    });
+
+
+Route::get('try',function(){
+   dd(auth()->user()->role->permissions);
+//    return \App\Models\Role::find(53)->permissions;
 });
 
 
 
-Route::group(['namespace'=>'Admin','prefix'=>'Admin','middleware'=>['auth','verified','user.type:admin,user']],function (){
-    ################################### categories ##############################################
-    Route::group(['prefix'=>'categories'],function(){
-        Route::get('index','CategoriesController@index')->name('categories.index');
-        Route::get('show/{id}','CategoriesController@show')->name('categories.show');
-        Route::get('create','CategoriesController@create')->name('categories.create');
-        Route::post('store','CategoriesController@store')->name('categories.store');
-        Route::get('edit/{id}','CategoriesController@edit')->name('categories.edit');
-        Route::post('update/{id}','CategoriesController@update')->name('categories.update');
-        Route::get('delete/{id}','CategoriesController@destroy')->name('categories.delete');
-    });
-    ################################### products ##############################################
-    Route::group(['prefix'=>'products'],function(){
-        Route::get('index','ProductsController@index')->name('products.index');
-        Route::get('show/{id}','ProductsController@show')->name('products.show');
-        Route::get('create','ProductsController@create')->name('products.create');
-        Route::post('store','ProductsController@store')->name('products.store');
-        Route::get('edit/{id}','ProductsController@edit')->name('products.edit');
-        Route::post('update/{id}','ProductsController@update')->name('products.update');
-        Route::get('delete/{id}','ProductsController@destroy')->name('products.delete');
-    });
-});
 
-
-Route::get('/','IndexController@index' )->name('home');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
@@ -63,3 +72,4 @@ Route::get('test',function(){
  //  $category->load('childs');
    dd($category);
 });
+Route::get('/{lang?}','IndexController@index' )->name('home');

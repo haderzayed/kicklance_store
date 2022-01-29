@@ -10,12 +10,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ProductsController extends Controller
 {
    public function index(){
+      // Gate::authorize('products');
+       $this->authorize('viewAny',product::class);
         $categories=category::all();
        $request=request();
        $filters=$request->query();
@@ -58,19 +61,23 @@ class ProductsController extends Controller
 
    public function show($id){
        $product=product::with('tags')->findOrFail($id);
+       $this->authorize('view',$product);
        $tags=Tag::whereRaw('id In (SELECT tag_id FROM product_tag WHERE product_id = ?)',$id)->get();
        return view('admin.products.show',compact('product','tags'));
    }
 
 
    public function create(){
+      // Gate::authorize('products.create');
+       $this->authorize('create',product::class);
        $categories=category::all();
        $tags=Tag::all();
        return view('admin.products.create',compact('categories','tags'));
    }
 
    public function store(Request $request){
-
+       //Gate::authorize('products.store');
+       $this->authorize('create',product::class);
       $data= $request->validate([
           'name'=>'required',
           'category__id'=>'required|exists:categories,id',
@@ -95,9 +102,11 @@ class ProductsController extends Controller
    }
 
    public function edit($id){
+       //Gate::authorize('products.update');
        $categories=category::all();
        $product=product::findOrFail($id);
        $tags=Tag::all();
+       $this->authorize('update',$product);
        //$product_tag=$product->tags()->pluck('id')->toArray();
        $product_tag=implode(',',$product->tags()->pluck('name')->toArray());
 //       $s=Storage::disk('public');
@@ -106,8 +115,9 @@ class ProductsController extends Controller
    }
 
    public function update(Request $request ,$id){
-
+    //   Gate::authorize('products.update');
        $product=product::findOrFail($id);
+       $this->authorize('update',$product);
         $request->validate([
            'name'=>'required',
            'category__id'=>'required|exists:categories,id',
@@ -148,7 +158,9 @@ class ProductsController extends Controller
    }
 
    public function destroy($id){
+       Gate::authorize('products.delete');
        $product=product::findOrFail($id);
+       $this->authorize('delete',$product);
        $product->delete();
        if($product->image){
            Storage::disk('public')->delete($product->image);

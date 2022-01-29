@@ -7,6 +7,7 @@ use App\Models\category;
 use App\Rules\ParentRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use voku\helper\ASCII;
 
@@ -49,6 +50,13 @@ class CategoriesController extends Controller
                       ])
                       ->orderBy('products_count','DESC')
                      ->paginate(); */
+       /* if(!Gate::allows('categories')){
+            abort(403,'you are not authorized');
+        }
+        if(Gate::denies('categories')){
+            abort(403,'you are not authorized');
+        }*/
+        Gate::authorize('categories');
         $categories=category::with('parent')->withCount('products')
             ->orderBy('products_count','ASC')
             ->orderBy('name', )
@@ -56,11 +64,6 @@ class CategoriesController extends Controller
         return view('admin.categories.index',compact('categories'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
-     */
 
     public function show($id){
         $category=category::findOrFail($id);
@@ -70,6 +73,10 @@ class CategoriesController extends Controller
 
     public function create()
     {
+      /*  if(Gate::denies('categories.create')){
+            abort(403,'you are not authorized');
+        }*/
+        Gate::authorize('categories.create');
         $categories=category::all();
         return  view('admin.categories.create',compact('categories'));
     }
@@ -82,6 +89,7 @@ class CategoriesController extends Controller
      */
     public function store(Request $request, $id='')
     {
+        Gate::authorize('categories.store');
        $validators=$this->validator($request , $id);
         $validators->validate();
 
@@ -91,22 +99,9 @@ class CategoriesController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
+        Gate::authorize('categories.update');
         $category=category::findOrFail($id);
         $categories=category::where('id','<>',$id)
                      ->where('parent_id','<>',$id)
@@ -116,15 +111,9 @@ class CategoriesController extends Controller
 
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
+        Gate::authorize('categories.update');
         $validators=$this->validator($request,$id);
         $validators->validate();
 
@@ -136,15 +125,26 @@ class CategoriesController extends Controller
         return redirect()->route('categories.index')->with('success','Category Updateded Successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+     public function destroy($id)
     {
-      category::findOrFail($id)->delete();
+        Gate::authorize('categories.delete');
+        category::findOrFail($id)->delete();
         return redirect()->route('categories.index')->with('success','Category Removed Successfully');
+    }
+    public function xml(){
+        $categories=category::all();
+        $xml='<?xml version="1.0" ?>';
+        $xml .='<categories >';
+        foreach ($categories as $category){
+            $xml .=sprintf('<category id = "%d">',$category->id);
+            $xml .=sprintf('<name> %s </name>',$category->name);
+            $xml .='</category>';
+        }
+        $xml .='</categories >';
+        return response($xml , 200 ,['Content-Type'=>'application/xml']);
+    }
+
+    public function json(){
+        return category::all();
     }
 }
