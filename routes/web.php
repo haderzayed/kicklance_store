@@ -19,8 +19,13 @@ use App\Http\Controllers;
     Route::post('cart','CartController@store')->name('cart.store');
     Route::delete('cart','CartController@destroy')->name('cart.destroy');
     Route::patch('cart','CartController@update')->name('cart.update');
+    Route::get('currency-converter/{from}/{to}','CurrencyConverterController@convert');
+    Route::get('currency-converter/currencies','CurrencyConverterController@currencies');
+    Route::get('weather','WeatherController@current');
 
-    Route::group(['middleware'=>'auth'],function (){
+
+
+Route::group(['middleware'=>'auth'],function (){
         Route::post('checkout','CheckoutController@store')->name('checkout');
         Route::get('orders','OrdersController@index')->name('orders');
         Route::get('orders/{order}','OrdersController@show')->name('order.show');
@@ -54,9 +59,14 @@ use App\Http\Controllers;
     });
 
 
-Route::get('try',function(){
-   dd(auth()->user()->role->permissions);
-//    return \App\Models\Role::find(53)->permissions;
+Route::get('try/{res}',function($results){
+     $url= 'https://randomuser.me/api';
+      return \Illuminate\Support\Facades\Http::baseUrl($url)
+         ->get('',[
+            'results'=>$results
+        ])->json();
+
+  // return \Illuminate\Support\Facades\Http::get('https://randomuser.me/api/?results='.$results);
 });
 
 

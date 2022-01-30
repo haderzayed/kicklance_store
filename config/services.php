@@ -29,5 +29,11 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'currency_converter_api'=>[
+        'key' => 'f3c33dfc78290a4339eb',
+    ],
+    'OpenWeatherMap'=>[
+       'key'=>'3a504595f7f10b652a4e0ade7cd3b9d5',
+    ],
 
 ];
