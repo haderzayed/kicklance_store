@@ -40,15 +40,15 @@ class CheckoutController extends Controller
                 ]);
             }
 
-           Cart::where('user_id',$user->id)
+          /* Cart::where('user_id',$user->id)
                 ->orWhere('id',$request->cookie('cart_id'))
-                ->delete();
+                ->delete();*/
                DB::commit();
                 event(new OrderCreated($order));
             return redirect()->route('orders')->with('success','Order Created');
         }catch(\Throwable $exception){
                DB::rollBack();
-               return $exception;
+
             return redirect()->back()->with('error',$exception->getMessage());
         }
 

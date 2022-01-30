@@ -21,7 +21,7 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
         OrderCreated::class=>[
-            SendEmail::class,
+           // SendEmail::class,
         ],
     ];
 

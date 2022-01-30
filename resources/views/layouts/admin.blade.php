@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
     <link href="{{asset('css/bootstrap.css')}}" rel="stylesheet">
+
  @yield('css')
 
 </head>
@@ -32,6 +33,23 @@
 <script src="{{asset('js/bootstrap.js')}}"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+<script>
+
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher('f49db998330f5fcbdb3c', {
+        cluster: 'eu',
+        authEndpoint: '/broadcasting/auth'
+    });
+
+    var channel = pusher.subscribe('private-orders');
+    channel.bind('order-created', function(data) {
+          alert(`new order created #`+ data.order.id)
+      //  alert(JSON.stringify(data));
+    });
+</script>
 @yield('js')
 </body>
 </html>
