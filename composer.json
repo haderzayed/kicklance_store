@@ -10,9 +10,12 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.75",
         "laravel/jetstream": "^2.5",
+        "laravel/nexmo-notification-channel": "^2.5",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "livewire/livewire": "^2.5",
+        "nexmo/laravel": "^2.4",
+        "paypal/paypal-checkout-sdk": "^1.0",
         "pusher/pusher-php-server": "^7.0"
     },
     "require-dev": {

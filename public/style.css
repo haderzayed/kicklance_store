@@ -137,7 +137,7 @@ z-index: 999;}
     border-color: #5a88ca;
 }
 .shopping-item:hover a {
-    color: #fff;text-decoration: none
+    text-decoration: none
 }
 .shopping-item:hover .cart-amunt {
     color: #fff;

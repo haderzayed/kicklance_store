@@ -22,13 +22,16 @@ use App\Http\Controllers;
     Route::get('currency-converter/{from}/{to}','CurrencyConverterController@convert');
     Route::get('currency-converter/currencies','CurrencyConverterController@currencies');
     Route::get('weather','WeatherController@current');
-
+    Route::get('paypal/return','CheckoutController@paypalReturn')->name('paypal.return');
+    Route::get('paypal/cancel','CheckoutController@paypalCancel')->name('paypal.cancel');
+    Route::get('checkout','CheckoutController@createOrder');
 
 
 Route::group(['middleware'=>'auth'],function (){
         Route::post('checkout','CheckoutController@store')->name('checkout');
         Route::get('orders','OrdersController@index')->name('orders');
         Route::get('orders/{order}','OrdersController@show')->name('order.show');
+        Route::get('notification/{id}','NotificationController@read')->name('notification.read');
     });
 
     Route::group(['namespace'=>'Admin','prefix'=>'Admin','middleware'=>['auth','verified','user.type:admin,user,super_admin']],function (){

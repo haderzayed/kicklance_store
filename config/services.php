@@ -35,5 +35,13 @@ return [
     'OpenWeatherMap'=>[
        'key'=>'3a504595f7f10b652a4e0ade7cd3b9d5',
     ],
+    'paypal'=>[
+        'mode'=>'sandbox',
+        'client_id'=>'ATSC3ooe2uK5fO4OJ3Vu28VHKYOq65H9sjmfupDUYxsWq0EVhJnHonxvQgGr9HLdzqYbXDX4zwKI1CjI',
+        'secret'=>'EBrUKLIa2uOsC2tOPN2SU9xcnUNk607lUiP75bQoFK_H-VXQ2eq0MXnb9efyj3EJQjnGExldZ8eJkUOi',
+    ],
+    'nexmo' => [
+        'sms_from' => 'App store',
+    ],
 
 ];

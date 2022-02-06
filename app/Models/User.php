@@ -42,11 +42,17 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Role::class,'role_id');
     }
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array
-     */
+   /* public function routeNotificationForNexmo($notification = null){
+         return $this->phone ;
+    }*/
+    /*
+    public function routeNotificationForEmail($notification = null){
+        return $this->email ;
+    }
+    public function routeNotificationForBroadcast($notification = null){
+        return 'App.Models.User.'.$this->id ;
+    }*/
+
     protected $hidden = [
         'password',
         'remember_token',
