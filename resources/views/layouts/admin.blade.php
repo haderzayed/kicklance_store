@@ -20,10 +20,10 @@
 @include('layouts.admin.navbar')
 <div class="container px-4">
     <div class="row gx-5 mt-5">
-    <div class="col-3">
+    <div class="col-2">
         @include('layouts.admin.sidebar')
     </div>
-<div class="col-9 ">
+<div class="col-10">
     <h2>@yield('page-title','title')</h2>
     @yield('content')
 </div>

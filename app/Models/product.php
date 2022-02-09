@@ -2,14 +2,42 @@
 
 namespace App\Models;
 
+use App\Scopes\PublishedScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class product extends Model
 {
     use HasFactory;
+    use SoftDeletes;
     protected $guarded=[];
 
+    //global scope modal
+   protected static function booted(){
+      /* static::addGlobalScope('published',function (Builder $builder){
+           $builder->where('status','published');
+       });*/
+       static::addGlobalScope(new PublishedScope());
+    }
+    //local scope modal
+
+    public function scopeFeatured(Builder $builder){
+        $builder->where('featured','1');
+    }
+
+    public function scopeWithDraft(Builder $builder){
+       // $builder->withoutGlobalScope('published');
+        $builder->withoutGlobalScope( PublishedScope::class);
+    }
+    public function scopePopular(Builder $builder ,$views , $sales=0){
+          $builder->where('views','>',$views);
+          if($sales){
+              $builder->where('sales','>',$sales);
+          }
+    }
     public function category(){
 
       return  $this->belongsTo(category::class,'category__id');
@@ -49,4 +77,8 @@ class product extends Model
         return ($this->image !== null) ? asset('storage/'.$this->image) : asset('images/default.jpg');
 
     }
+    public function ratings(){
+        return $this->morphMany(Rating::class ,'rateable');
+    }
+
 }

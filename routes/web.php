@@ -48,7 +48,7 @@ Route::group(['middleware'=>'auth'],function (){
             Route::get('delete/{id}','CategoriesController@destroy')->name('categories.delete');
         });
         ################################### products ##############################################
-        Route::group(['prefix'=>'products'],function(){
+         Route::group(['prefix'=>'products'],function(){
             Route::get('index','ProductsController@index')->name('products.index');
             Route::get('show/{id}','ProductsController@show')->name('products.show');
             Route::get('create','ProductsController@create')->name('products.create');
@@ -56,8 +56,11 @@ Route::group(['middleware'=>'auth'],function (){
             Route::get('edit/{id}','ProductsController@edit')->name('products.edit');
             Route::post('update/{id}','ProductsController@update')->name('products.update');
             Route::get('delete/{id}','ProductsController@destroy')->name('products.delete');
+            Route::get('trash','ProductsController@trash')->name('products.trash');
+            Route::put('restore/{id}','ProductsController@restore')->name('products.restore');
+            Route::delete('force-delete/{id}','ProductsController@forceDelete')->name('products.force.delete');
         });
-
+       // Route::resource('products','ProductsController');
         Route::resource('roles','RolesController');
     });
 

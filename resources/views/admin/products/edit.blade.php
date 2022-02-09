@@ -12,8 +12,9 @@
 
         </div>
     @endif
-<form method="post" action="{{route('products.update',$product->id)}}"   enctype="multipart/form-data">
-    @csrf
+
+    <form method="post" action="{{route('products.update',$product->id)}}" enctype="multipart/form-data">
+        @csrf
     <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Product Name</label>
         <input type="text" name="name" class="form-control" value="{{old('name',$product->name)}}" id="exampleInputEmail1" aria-describedby="emailHelp">

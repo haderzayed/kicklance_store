@@ -50,7 +50,12 @@ class ProductsController extends Controller
            })
            ->when($request->query('category_id'),function ($query,$category_id){
                $query->where('category__id','=', $category_id );
-           });
+           })
+            ->withDraft()
+        //  ->withoutGlobalScope('published')
+          // ->onlyTrashed();
+         // ->withTrashed()
+       ;
        return view('admin.products.index',[
            'categories'=>$categories,
            'products'=>$products->paginate(),
@@ -102,11 +107,13 @@ class ProductsController extends Controller
    }
 
    public function edit($id){
+       //dd($id);
        //Gate::authorize('products.update');
-       $categories=category::all();
+
        $product=product::findOrFail($id);
+       $categories=category::all();
        $tags=Tag::all();
-       $this->authorize('update',$product);
+    //   $this->authorize('update',$product);
        //$product_tag=$product->tags()->pluck('id')->toArray();
        $product_tag=implode(',',$product->tags()->pluck('name')->toArray());
 //       $s=Storage::disk('public');
@@ -116,6 +123,7 @@ class ProductsController extends Controller
 
    public function update(Request $request ,$id){
     //   Gate::authorize('products.update');
+      // dd($id);
        $product=product::findOrFail($id);
        $this->authorize('update',$product);
         $request->validate([
@@ -134,20 +142,12 @@ class ProductsController extends Controller
        if($request->hasFile('image') && $image->isValid()){
            $data['image']=$image->store('products','public');
        }
-      // $product=product::where('id',$id)->update($data);
        $product->update($data);
        $this->saveTags($product, $request);
        //$tags=$request->post('tag',[]);
       // $product->tags()->sync($tags);
       // $product->tags()->syncWithoutDetaching($tags);
 
-       /*DB::table('product_tag')->where('product_id',$id)->delete();
-       foreach ($tags as $tag_id){
-          DB::table('product_tag')->insert([
-              'product_id'=>$id,
-              'tag_id'=>$tag_id
-          ]);
-       }*/
        if(isset($old_image) && isset($data['image'])){
          /*  $img= Str::after($old_image,'/storage');
            $img=base_path('storage/app/public'.$img);
@@ -162,9 +162,7 @@ class ProductsController extends Controller
        $product=product::findOrFail($id);
        $this->authorize('delete',$product);
        $product->delete();
-       if($product->image){
-           Storage::disk('public')->delete($product->image);
-       }
+
        return redirect()->route('products.index')->with('success',"product Deleted successfully ");
    }
 
@@ -183,5 +181,25 @@ class ProductsController extends Controller
           $tags_id[]=$tag->id;
       }
        $product->tags()->sync($tags_id);
+   }
+
+   public function trash(){
+       $products=product::with('category')->onlyTrashed()->paginate();
+       return view('admin.products.trash',compact('products'));
+   }
+   public function restore(Request $request,$id){
+       $product=product::onlyTrashed()->findOrFail($id);
+       $product->restore();
+       return redirect()->route('products.index')->with('success',"product Deleted restored ");
+
+   }
+
+   public function forceDelete($id){
+       $product=product::onlyTrashed()->findOrFail($id);
+       $product->forceDelete();
+         if($product->image){
+          Storage::disk('public')->delete($product->image);
+      }
+       return redirect()->route('products.index')->with('success',"product Deleted force deleted ");
    }
 }

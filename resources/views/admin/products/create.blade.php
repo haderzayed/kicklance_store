@@ -30,17 +30,17 @@
     </div>
     <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Product Price</label>
-        <input type="text" name="price" class="form-control" value="{{old('price')}}" id="exampleInputEmail1" aria-describedby="emailHelp">
+        <input type="number" name="price" class="form-control" value="{{old('price')}}" id="exampleInputEmail1" aria-describedby="emailHelp">
 
     </div>
     <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Product Sale Price</label>
-        <input type="text" name="sale_price" class="form-control" value="{{old('sale_price')}}" id="exampleInputEmail1" aria-describedby="emailHelp">
+        <input type="number" name="sale_price" class="form-control" value="{{old('sale_price')}}" id="exampleInputEmail1" aria-describedby="emailHelp">
 
     </div>
     <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Product Quantity</label>
-        <input type="text" name="quantity" class="form-control" value="{{old('quantity')}}" id="exampleInputEmail1" aria-describedby="emailHelp">
+        <input type="number" name="quantity" class="form-control" value="{{old('quantity')}}" id="exampleInputEmail1" aria-describedby="emailHelp">
     </div>
     <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Product Image</label>
