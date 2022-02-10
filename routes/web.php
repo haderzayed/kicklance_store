@@ -32,7 +32,10 @@ Route::group(['middleware'=>'auth'],function (){
         Route::get('orders','OrdersController@index')->name('orders');
         Route::get('orders/{order}','OrdersController@show')->name('order.show');
         Route::get('notification/{id}','NotificationController@read')->name('notification.read');
-    });
+        Route::post('favourites','FavouritesController@store')->name('favourites.store');
+        Route::delete('favourites/{id}','FavouritesController@destroy')->name('favourite.destroy');
+
+});
 
     Route::group(['namespace'=>'Admin','prefix'=>'Admin','middleware'=>['auth','verified','user.type:admin,user,super_admin']],function (){
         ################################### categories ##############################################

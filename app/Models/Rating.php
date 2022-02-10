@@ -8,9 +8,4 @@ use Illuminate\Database\Eloquent\Model;
 class Rating extends Model
 {
     use HasFactory;
-
-    public function rateable(){
-
-        return $this->morphTo('rateable');
-    }
 }

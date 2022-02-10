@@ -55,6 +55,8 @@ class product extends Model
 
         );
     }
+
+
     public function orders(){
 
         return $this->belongsToMany(Order::class,'order_products')
@@ -78,6 +80,10 @@ class product extends Model
     }
     public function ratings(){
         return $this->morphMany(Rating::class ,'rateable');
+    }
+    public  function favouriteUsers(){
+
+        return $this->belongsToMany(User::class,'favourites');
     }
 
 }

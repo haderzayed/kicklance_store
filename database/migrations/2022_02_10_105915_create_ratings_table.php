@@ -15,8 +15,8 @@ class CreateRatingsTable extends Migration
     {
         Schema::create('ratings', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('value');
-            $table->morphs('rateable');
+            $table->foreignId('user_id')->constrained('users','id')->cascadeOnDelete();
+             $table->morphs('rateable');
             $table->timestamps();
         });
     }

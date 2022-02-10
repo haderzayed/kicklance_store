@@ -11,8 +11,11 @@
     <div class="product-carousel-price">
         <ins>${{number_format($product->price,2)}}</ins> <del>${{number_format($product->sale_pric,2)}}</del>
     </div>
-    <form action="{{route('cart.store')}}" method="post">
+    <div>
+    <form action="{{route('cart.store')}}" method="post" class="d-inline">
         @csrf
-        <button type="submit" class="add-to-cart-link" name="product_id" value="{{$product->id}}"><i class="fa fa-shopping-cart"></i> Add to cart</button>
+        <button type="submit" class="add-to-cart-link" name="product_id" value="{{$product->id}}"><i class="fa fa-shopping-cart"></i> </button>
     </form>
+        <a href="#" data-toggle="favourites"  data-id="{{$product->id}}" class="favourite @if($product->favourite) active @endif"><i class="fa fa-heart"></i></a>
+    </div>
 </div>
