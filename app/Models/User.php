@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
@@ -28,6 +29,15 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
     ];
+    protected static function booted()
+    {
+         static::saving(function ($user){
+             if(Hash::needsRehash(  $user->password)){
+                 $user->password=Hash::make($user->password);
+             }
+         });
+    }
+
     public function products(){
         return $this->hasMany(product::class);
     }

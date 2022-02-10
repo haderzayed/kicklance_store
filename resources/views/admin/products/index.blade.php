@@ -35,7 +35,6 @@
         <th scope="col">Price</th>
         <th scope="col">Quantity</th>
         <th scope="col">User</th>
-        <th scope="col">Deleted At</th>
         <th scope="col"></th>
     </tr>
     </thead>
@@ -51,10 +50,10 @@
         <td>{{$product->price}}</td>
         <td>{{$product->quantity}}</td>
         <td>{{$product->user->name}}</td>
-        <td>{{$product->deleted_at}}</td>
+
         <td>
             @can('update',$product)
-            <a href="{{route('products.edit',$product->id)}}" class="btn btn-info btn-sm fa fa-edit" role="button" aria-pressed="true"> </a>
+            <a href="{{route('products.edit',$product->id)}}" class="btn btn-info btn-sm fa fa-edit " role="button" aria-pressed="true"> </a>
             @endcan
             @can('delete',$product)
             <a  href="{{route('products.delete',$product->id)}}" class="btn btn-danger btn-sm fa fa-trash" >  </a>

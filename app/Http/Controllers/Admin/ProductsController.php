@@ -22,22 +22,6 @@ class ProductsController extends Controller
         $categories=category::all();
        $request=request();
        $filters=$request->query();
-       /*$products=product::query();
-       if($request->query('name')){
-           $products->where('name','LiKe','%'. $request->query('name') .'%');
-       }
-       if($request->query('price_min')){
-           $products->where('price','LiKe','%'. $request->query('price_min') .'%');
-       }
-       if($request->query('price_max')){
-           $products->where('price','LiKe','%'. $request->query('price_max') .'%');
-       }
-       if($request->query('category_id')){
-           $products->where('category__id','LiKe','%'. $request->query('category_id') .'%');
-       }*/
-    /*   $products=product::when($value,function ($query->object of database,$value){
-           $query->where('name','LiKe','%'. $value .'%');
-       });*/
        // Eager loading
        $products=product::with('category','user')->when($request->query('name'),function ($query,$name){
            $query->where('name','LIKE','%'. $name .'%');
@@ -65,7 +49,7 @@ class ProductsController extends Controller
 
 
    public function show($id){
-       $product=product::with('tags')->findOrFail($id);
+       $product=product::withDraft()->with('tags')->findOrFail($id);
        $this->authorize('view',$product);
        $tags=Tag::whereRaw('id In (SELECT tag_id FROM product_tag WHERE product_id = ?)',$id)->get();
        return view('admin.products.show',compact('product','tags'));
@@ -73,7 +57,6 @@ class ProductsController extends Controller
 
 
    public function create(){
-      // Gate::authorize('products.create');
        $this->authorize('create',product::class);
        $categories=category::all();
        $tags=Tag::all();
@@ -107,24 +90,18 @@ class ProductsController extends Controller
    }
 
    public function edit($id){
-       //dd($id);
        //Gate::authorize('products.update');
-
-       $product=product::findOrFail($id);
+       $product=product::withDraft()->findOrFail($id);
        $categories=category::all();
        $tags=Tag::all();
     //   $this->authorize('update',$product);
-       //$product_tag=$product->tags()->pluck('id')->toArray();
        $product_tag=implode(',',$product->tags()->pluck('name')->toArray());
-//       $s=Storage::disk('public');
-//       dd($s,$product->image);
        return view('admin.products.edit',compact('categories','product','tags','product_tag'));
    }
 
    public function update(Request $request ,$id){
     //   Gate::authorize('products.update');
-      // dd($id);
-       $product=product::findOrFail($id);
+       $product=product::withDraft()->findOrFail($id);
        $this->authorize('update',$product);
         $request->validate([
            'name'=>'required',
@@ -149,17 +126,14 @@ class ProductsController extends Controller
       // $product->tags()->syncWithoutDetaching($tags);
 
        if(isset($old_image) && isset($data['image'])){
-         /*  $img= Str::after($old_image,'/storage');
-           $img=base_path('storage/app/public'.$img);
-           unlink($img);*/
            Storage::disk('public')->delete($old_image);
        }
        return redirect()->route('products.index')->with('success',"product updated successfully ");
    }
 
    public function destroy($id){
-       Gate::authorize('products.delete');
-       $product=product::findOrFail($id);
+     //  Gate::authorize('products.delete');
+       $product=product::withDraft()->findOrFail($id);
        $this->authorize('delete',$product);
        $product->delete();
 
@@ -184,7 +158,7 @@ class ProductsController extends Controller
    }
 
    public function trash(){
-       $products=product::with('category')->onlyTrashed()->paginate();
+       $products=product::with('category')->withDraft()->onlyTrashed()->paginate();
        return view('admin.products.trash',compact('products'));
    }
    public function restore(Request $request,$id){
@@ -195,11 +169,11 @@ class ProductsController extends Controller
    }
 
    public function forceDelete($id){
-       $product=product::onlyTrashed()->findOrFail($id);
+       $product=product::onlyTrashed()->withDraft()->findOrFail($id);
        $product->forceDelete();
-         if($product->image){
+        /* if($product->image){
           Storage::disk('public')->delete($product->image);
-      }
+      }*/
        return redirect()->route('products.index')->with('success',"product Deleted force deleted ");
    }
 }

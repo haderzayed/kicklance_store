@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Observers\ProductObserver;
 use App\Scopes\PublishedScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 
 class product extends Model
@@ -17,10 +19,8 @@ class product extends Model
 
     //global scope modal
    protected static function booted(){
-      /* static::addGlobalScope('published',function (Builder $builder){
-           $builder->where('status','published');
-       });*/
        static::addGlobalScope(new PublishedScope());
+       static::observe(ProductObserver::class);
     }
     //local scope modal
 
@@ -29,7 +29,6 @@ class product extends Model
     }
 
     public function scopeWithDraft(Builder $builder){
-       // $builder->withoutGlobalScope('published');
         $builder->withoutGlobalScope( PublishedScope::class);
     }
     public function scopePopular(Builder $builder ,$views , $sales=0){
