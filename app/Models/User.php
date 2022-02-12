@@ -58,15 +58,21 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function ratedProducts(){
 
-        return $this->morphMany(product::class ,'rateable','ratings');
+        return $this->morphedByMany(product::class ,'rateable','ratings');
+        //return product that user rate it
     }
 
     public function ratedUsers(){
 
-        return $this->morphMany(User::class ,'rateable','ratings');
+        return $this->morphedByMany(User::class ,'rateable','ratings');
+        //return user that user rate it
     }
     public function ratings(){
-        return $this->morphMany(Rating::class ,'rateable');
+        return $this->morphToMany(User::class ,'rateable','ratings')
+        ->withPivot([
+            'rating','created_at','updated_at'
+        ]);
+        //return User rate that this user
     }
 
    /* public function routeNotificationForNexmo($notification = null){

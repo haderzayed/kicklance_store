@@ -47,6 +47,8 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
 
 <!-- Latest jQuery form server -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
 <script src="https://code.jquery.com/jquery.min.js"></script>
 <!-- Bootstrap JS form CDN -->
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
@@ -72,6 +74,6 @@
 </script>
 <script src="{{asset('js/app.js')}}"></script>
 <script src="{{asset('js/scripts.js')}}"></script>
-
+@yield('script')
 </body>
 </html>

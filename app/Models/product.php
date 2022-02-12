@@ -79,7 +79,11 @@ class product extends Model
 
     }
     public function ratings(){
-        return $this->morphMany(Rating::class ,'rateable');
+        return $this->morphToMany(User::class ,'rateable','ratings')
+                    ->withPivot([
+                         'rating','created_at','updated_at'
+                    ]);
+        //return User that rate this product
     }
     public  function favouriteUsers(){
 

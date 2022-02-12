@@ -31,9 +31,12 @@ Route::group(['middleware'=>'auth'],function (){
         Route::post('checkout','CheckoutController@store')->name('checkout');
         Route::get('orders','OrdersController@index')->name('orders');
         Route::get('orders/{order}','OrdersController@show')->name('order.show');
+        Route::get('orders/{order}/payment/callback','PaymentController@callback')->name('payment.callback');
         Route::get('notification/{id}','NotificationController@read')->name('notification.read');
         Route::post('favourites','FavouritesController@store')->name('favourites.store');
         Route::delete('favourites/{id}','FavouritesController@destroy')->name('favourite.destroy');
+        Route::post('ratings/product','RatingsController@storeProductRating');
+        Route::post('ratings/user','RatingsController@storeUserRating');
 
 });
 
@@ -86,9 +89,10 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-Route::get('test',function(){
+/*Route::get('test',function(){
    $category = \App\Models\category::with('childs')->find(19);
  //  $category->load('childs');
    dd($category);
-});
+});*/
 Route::get('/{lang?}','IndexController@index' )->name('home');
+

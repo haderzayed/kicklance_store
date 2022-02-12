@@ -18,7 +18,7 @@
                      title: 'Done...',
                      text: response.message,
                  })
-                
+
              })
             return;
         }
@@ -36,4 +36,17 @@
            })
        })
     });
+
+    $('[data-toggle="product-rating"]').on('change',function (e){
+        e.preventDefault();
+        $.post('/ratings/product',{
+            product_id:$(this).data('id'),
+            rating:$(this).val(),
+            _token:_crfToken
+        },function (response){
+           alert(response.rating)
+        })
+    });
+
+
 })(jQuery);

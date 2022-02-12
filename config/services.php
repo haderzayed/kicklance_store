@@ -43,5 +43,9 @@ return [
     'nexmo' => [
         'sms_from' => 'App store',
     ],
+    'moyasar'=>[
+        'key'=>'pk_test_LGomrHwYfYMC3N8C7vJRMdsgre1um2rjon3a4mHq',
+        'secret'=>'sk_test_EuCSVpb2Wj6KUJTHQWmMBFBY2cr1gnPGbn8EcLjH',
+    ],
 
 ];

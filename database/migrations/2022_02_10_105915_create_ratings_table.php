@@ -17,6 +17,7 @@ class CreateRatingsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users','id')->cascadeOnDelete();
              $table->morphs('rateable');
+             $table->enum('rating',[1,2,3,4,5]);
             $table->timestamps();
         });
     }
