@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\product;
 
 use App\Models\User;
@@ -21,6 +22,7 @@ class IndexController extends Controller
            ])
             ->latest()->limit(6)->get();
       //  return $users=User::get();
-        return view('front.home',compact('products'));
+        $cart=Cart::all();
+        return view('front.home',compact('products','cart'));
     }
 }

@@ -2,9 +2,9 @@
 
 @section('content')
     <x-alerts></x-alerts>
-      <h2>Order # {{$order->id}}</h2>
+      <h2 class="m-5">Order # {{$order->id}}</h2>
 
-      <table class="table ">
+      <table class="table" style="width:50%;margin-left:30px;">
           <thead>
           <tr>
               <th scope="col">Product</th>

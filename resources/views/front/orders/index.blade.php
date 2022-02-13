@@ -3,7 +3,7 @@
 @section('content')
     <x-alerts></x-alerts>
    <h2 class="text-center">{{trans('order.my_order')}}</h2>
-    <table class="table" style="width:50%;margin-left:500px;">
+    <table class="table" style="width:50%;margin-left:400px;">
         <thead>
         <tr>
             <th scope="col">#</th>
