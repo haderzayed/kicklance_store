@@ -26,7 +26,6 @@ use App\Http\Controllers;
     Route::get('paypal/cancel','CheckoutController@paypalCancel')->name('paypal.cancel');
     Route::get('checkout','CheckoutController@createOrder');
 
-
 Route::group(['middleware'=>'auth'],function (){
         Route::post('checkout','CheckoutController@store')->name('checkout');
         Route::get('orders','OrdersController@index')->name('orders');

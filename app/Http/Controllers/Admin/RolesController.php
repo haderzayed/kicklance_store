@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+
 use App\Models\Role;
-
-
 use App\Models\RolePermission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -16,6 +15,7 @@ use Illuminate\Support\Facades\Validator;
 class RolesController extends Controller
 {
     public function __construct(){
+
         $this->authorizeResource(Role::class,'role');
     }
     public function index()

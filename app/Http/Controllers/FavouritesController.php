@@ -9,10 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class FavouritesController extends Controller
 {
 
-    public function index()
-    {
-        //
-    }
+
 
 
     public function store(Request $request)
